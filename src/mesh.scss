@@ -10,7 +10,7 @@
 $mesh: (
     properties: (
         columns: 12,
-        gutter: 15px
+        gutter: 4px
     ),
     breakpoints: (
         smallest: (
@@ -27,7 +27,8 @@ $mesh: (
         ),
         medium: (
             name: m,
-            value: 768px
+            value: 768px,
+            gutter: 8px
         ),
         large: (
             name: l,
@@ -45,7 +46,7 @@ $mesh: (
 
 @function get-mesh-map($keys...) {
     $map: $mesh;
-
+    
     @each $key in $keys {
         @if map-has-key($map, $key) {
             $map: map-get($map, $key);
@@ -53,7 +54,7 @@ $mesh: (
             @error 'The `#{$key}` key does not exist in `$mesh` map.';
         }
     }
-
+    
     @return $map;
 }
 
@@ -64,13 +65,13 @@ $mesh: (
     padding: 0;
     // Convert to negative value.
     margin: 0 (get-mesh-map(properties, gutter) * -1);
-
+    
     &:before,
     &:after {
         content: '';
         display: table;
     }
-
+    
     &:after {
         clear: both;
     }
@@ -78,6 +79,16 @@ $mesh: (
 
 .mesh-row.no-reset {
     margin: 0;
+}
+
+@each $breakpoint in map-keys(get-mesh-map(breakpoints)) {
+    @if(map_has_key(get-mesh-map(breakpoints, $breakpoint), gutter)) {
+        @media only screen and (min-width: get-mesh-map(breakpoints, $breakpoint, value)) {
+            .mesh-row {
+                margin: (get-mesh-map(breakpoints, $breakpoint, gutter) * -1);
+            }
+        }
+    }
 }
 
 // Columns
@@ -104,6 +115,12 @@ $mesh: (
 
 @each $breakpoint in map-keys(get-mesh-map(breakpoints)) {
     @media only screen and (min-width: get-mesh-map(breakpoints, $breakpoint, value)) {
+        @if(map_has_key(get-mesh-map(breakpoints, $breakpoint), gutter)) {
+            [class*='mesh-col-'] {
+                padding: get-mesh-map(breakpoints, $breakpoint, gutter);
+            }
+        }
+        
         @for $columns from 1 through get-mesh-map(properties, columns) {
             .mesh-col-#{get-mesh-map(breakpoints, $breakpoint, name)}-#{$columns} {
                 width: percentage($columns / get-mesh-map(properties, columns));

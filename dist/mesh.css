@@ -1,5 +1,5 @@
 /**
- * Mesh
+ * mesh-grid
  * A tiny yet powerful grid system
  * @version v4.2.2
  * @license MIT
@@ -7,7 +7,7 @@
 
 .mesh-row {
     padding: 0;
-    margin: 0 -15px;
+    margin: 0 -4px;
 }
 
 .mesh-row:before, .mesh-row:after {
@@ -23,11 +23,17 @@
     margin: 0;
 }
 
+@media only screen and (min-width: 768px) {
+    .mesh-row {
+        margin: -8px;
+    }
+}
+
 [class*='mesh-col-'] {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     float: left;
-    padding: 0 15px;
+    padding: 0 4px;
     width: 100%;
 }
 
@@ -197,6 +203,9 @@
 }
 
 @media only screen and (min-width: 768px) {
+    [class*='mesh-col-'] {
+        padding: 8px;
+    }
     .mesh-col-m-1 {
         width: 8.33333%;
     }
